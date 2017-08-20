@@ -18,6 +18,20 @@ $(document).ready(function(){
 			"sound" : "assets/sounds/lightsaber.wav"
 		},
 		{
+			"name" : "Mace Windu",
+			"portrait" : "assets/images/placeholder.png",
+			"hp" : 120,
+			"attack" : 10,
+			"sound" : "assets/sounds/lightsaber.wav"
+		},
+		{
+			"name" : "Yoda",
+			"portrait" : "assets/images/placeholder.png",
+			"hp" : 120,
+			"attack" : 10,
+			"sound" : "assets/sounds/lightsaber.wav"
+		},
+		{
 			"name" : "Luke",
 			"portrait" : "assets/images/placeholder.png",
 			"hp" : 120,
@@ -81,6 +95,8 @@ $(document).ready(function(){
 		// set player character
 		player = characters[$(this).data("number")];
 		// show player character splash
+		$("#player").html(buildCharacter($(this).data("number"))).css("width", "300px");
+		$("#player .option").css("cursor", "auto");
 		// populate options for opponents
 		charactersLeft.splice( $(this).data("number"), 1 );
 		// show opponents box
@@ -103,8 +119,12 @@ $(document).ready(function(){
 		$.each(charactersLeft, function(index, value){
 			displayOpponents += buildCharacter( value );
 		});
+		displayOpponents += "<div id='opponentMask'></div>";
 		$("#opponents").html(displayOpponents);
 		// show battle scene
+		$("#battle").html(buildCharacter($(this).data("number")));
+		$("#battle, #attack").css("display", "inline-block");
+		$("#battle .option").css({"top": "0px", "opacity": 1});
 	});
 
 	// user clicks attack button
@@ -128,6 +148,8 @@ $(document).ready(function(){
 						// win game
 					}else{
 						// win notification
+						// remove opponent
+						$("#battle .option").css({"top": "-300px", "opacity": 0});
 						// re-enable opponents box
 					}
 				}else{

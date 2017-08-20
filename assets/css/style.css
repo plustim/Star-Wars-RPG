@@ -1,25 +1,63 @@
-#player, #opponents, #battle{
-	border: 1px solid blue;
-	min-height: 20px;
+body{
+	text-align: center;
+}
+
+#player, #battle{
+	background: #ddd;
+	height: 420px;
+	display: inline-block;
 }
 
 #player{
 	width: 100%;
 	transition: 0.4s width;
-	text-align: center;
+	-text-align: center;
+	display: inline-block;
+}
+
+#battle{
+	width: 300px;
+	display: none;
+}
+
+#attack{
+	width: 200px;
+	height: 420px;
+	background: blue;
+	display: none;
+}
+
+#opponents{
+	position: relative;
+}
+
+#opponentMask{
+	position: absolute;
+	top: 0;
+	width: 100%;
+	background: white;
+	height: 100%;
+	opacity: 0.1;
 }
 
 .option{
 	display: inline-block;
-	height: 400px;
+	height: 350px;
 	width: 200px;
 	margin: 10px 20px;
 	text-align: center;
 	position: relative;
 	left: 0px;
 	right: 0px;
+	top: 0px;
 	transition: 0.3s linear all;
 	cursor: pointer;
+}
+
+#battle .option{
+	opacity: 0;
+	top: 300px;
+	cursor: auto;
 }
 
 .option h3{
