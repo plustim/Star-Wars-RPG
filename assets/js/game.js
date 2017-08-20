@@ -61,7 +61,7 @@ $(document).ready(function(){
 	}
 
 	function buildCharacter( id ){
-		var card = "<div class='option' data-number='" + id + "'><div class='portrait' style='background-image:url(" + characters[id].portrait + ");'></div><h3>" + characters[id].name + "</h3><div class='hp-holder'><div class='hp'></div></div><span>" + characters[id].hp + "</span></div>";
+		var card = "<div class='option' data-number='" + id + "'><h3>" + characters[id].name + "</h3><div class='portrait' style='background-image:url(" + characters[id].portrait + ");'></div><div class='hp-holder'><div class='hp'></div></div><span>" + characters[id].hp  + "</span> / " + characters[id].hp  + "</div>";
 		return card;
 	}
 
@@ -174,7 +174,7 @@ $(document).ready(function(){
 						var counterWon = defend();
 						// delay for hp animation
 						setTimeout(function() {
-							$("#player .option span").html(opponent.hp);
+							$("#player .option span").html(player.hp);
 							if ( counterWon ){
 								// game over
 								// The force was not with you this time.
@@ -186,7 +186,7 @@ $(document).ready(function(){
 					}, 500);	
 				}
 			}, 400);
-		}, 500);	
+		}, 700);	
 	});
 
 	startGame();
