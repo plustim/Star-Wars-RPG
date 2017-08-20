@@ -1,0 +1,41 @@
+#player{
+	width: 100%;
+	transition: 0.4s width;
+	text-align: center;
+}
+
+.option{
+	display: inline-block;
+	height: 400px;
+	width: 200px;
+	margin: 10px 20px;
+	text-align: center;
+	position: relative;
+	left: 0px;
+	right: 0px;
+	transition: 0.3s linear all;
+}
+
+.option h3{
+	
+}
+
+.portrait{
+	background-size: cover;
+	background-position: center top;
+	height: 200px;
+}
+
+.hp-holder{
+	border-style: 1px solid black;
+	height: 14px;
+	padding: 2px 0;
+}
+
+.hp{
+	height: 10px;
+	background: #aaffaa;
+	width: 100%;
+	transition: 0.5s linear width;
+}
+
