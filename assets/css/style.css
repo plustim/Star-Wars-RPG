@@ -20,11 +20,12 @@ body{
 	display: none;
 }
 
-#attack{
+#vs{
 	width: 200px;
-	height: 420px;
-	background: blue;
+	height: 30px;
 	display: none;
+	transition: 0.3s linear height;
+	overflow: hidden;
 }
 
 #opponents{
@@ -42,6 +43,7 @@ body{
 
 .option{
 	display: inline-block;
+	background: white;
 	height: 350px;
 	width: 200px;
 	margin: 10px 20px;
@@ -50,13 +52,13 @@ body{
 	left: 0px;
 	right: 0px;
 	top: 0px;
-	transition: 0.3s linear all;
+	transition: 0.2s linear all;
 	cursor: pointer;
 }
 
 #battle .option{
 	opacity: 0;
-	top: 300px;
+	top: 100px;
 	cursor: auto;
 }
 
@@ -71,7 +73,7 @@ body{
 }
 
 .hp-holder{
-	border-style: 1px solid black;
+	border: 1px solid black;
 	height: 14px;
 	padding: 2px 0;
 }

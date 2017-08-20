@@ -11,6 +11,7 @@ $(document).ready(function(){
 
 	var characters = [
 		{
+			"id" : 0,
 			"name" : "Obi Wan",
 			"portrait" : "assets/images/placeholder.png",
 			"hp" : 120,
@@ -18,6 +19,7 @@ $(document).ready(function(){
 			"sound" : "assets/sounds/lightsaber.wav"
 		},
 		{
+			"id" : 1,
 			"name" : "Mace Windu",
 			"portrait" : "assets/images/placeholder.png",
 			"hp" : 120,
@@ -25,6 +27,7 @@ $(document).ready(function(){
 			"sound" : "assets/sounds/lightsaber.wav"
 		},
 		{
+			"id" : 2,
 			"name" : "Yoda",
 			"portrait" : "assets/images/placeholder.png",
 			"hp" : 120,
@@ -32,6 +35,7 @@ $(document).ready(function(){
 			"sound" : "assets/sounds/lightsaber.wav"
 		},
 		{
+			"id" : 3,
 			"name" : "Luke",
 			"portrait" : "assets/images/placeholder.png",
 			"hp" : 120,
@@ -57,7 +61,7 @@ $(document).ready(function(){
 	}
 
 	function buildCharacter( id ){
-		var card = "<div class='option' data-number='" + id + "'><div class='portrait' style='background-image:url(" + characters[id].portrait + ");'></div><h3>" + characters[id].name + "</h3><div class='hp-holder'><div class='hp'></div></div>" + characters[id].hp + "</div>";
+		var card = "<div class='option' data-number='" + id + "'><div class='portrait' style='background-image:url(" + characters[id].portrait + ");'></div><h3>" + characters[id].name + "</h3><div class='hp-holder'><div class='hp'></div></div><span>" + characters[id].hp + "</span></div>";
 		return card;
 	}
 
@@ -69,9 +73,10 @@ $(document).ready(function(){
 			opponent.hp = 0;
 		}
 		// increase attack stat
-		player.attack += 1;
+		player.attack += 10;
 		// hp animation
-		var hpBar = opponent.hp / character[opponent.id].hp * 100 + "%";
+		var hpBar = opponent.hp / characters[opponent.id].hp * 100 + "%";
+		console.log(opponent.hp, characters[opponent.id].hp, hpBar);
 		$("#battle .hp").css("width", hpBar);
 		// win check (return bool for result)
 		return ( opponent.hp === 0 );
@@ -85,7 +90,7 @@ $(document).ready(function(){
 			player.hp = 0;
 		}
 		// hp animation
-		var hpBar = player.hp / character[player.id].hp * 100 + "%";
+		var hpBar = player.hp / characters[player.id].hp * 100 + "%";
 		$("#player .hp").css("width", hpBar);
 		// lose check (return bool for result)
 	}
@@ -93,7 +98,7 @@ $(document).ready(function(){
 	// user clicks character
 	$("#player").on("click", ".option", function(){
 		// set player character
-		player = characters[$(this).data("number")];
+		player = $.extend({}, characters[$(this).data("number")]);
 		// show player character splash
 		$("#player").html(buildCharacter($(this).data("number"))).css("width", "300px");
 		$("#player .option").css("cursor", "auto");
@@ -111,7 +116,7 @@ $(document).ready(function(){
 	$("#opponents").on("click", ".option", function(){
 		// disable opponents box
 		// set current opponent
-		opponent = characters[$(this).data("number")];
+		opponent = $.extend({}, characters[$(this).data("number")]);
 		// remove opponent from opponents options
 		charactersLeft.splice( $.inArray( $(this).data("number"), charactersLeft), 1 );
 		// re-populate options for opponents
@@ -123,56 +128,64 @@ $(document).ready(function(){
 		$("#opponents").html(displayOpponents);
 		// show battle scene
 		$("#battle").html(buildCharacter($(this).data("number")));
-		$("#battle, #attack").css("display", "inline-block");
-		$("#battle .option").css({"top": "0px", "opacity": 1});
+		$("#battle, #vs").css("display", "inline-block");
+		setTimeout(function() {
+			$("#battle .option").css({"top": "0px", "opacity": 1});
+			$("#vs").css("height", "30px");
+		}, 100);
 	});
 
 	// user clicks attack button
-	$("#battle").on("click", "#attack", function(){
+	$("#attack").on("click", function(){
 		// disable attack button
+		$("#vs").css("height", "0px");
 		// attack animation
-		$("#player .option").css({"right": "100px", "transform": "rotate(-30deg)"});
+		$("#player .option").css({"left": "500px", "transform": "rotate(30deg)", "z-index": "100"});
 		setTimeout(function() {
-			$("#player .option").css({"right": "0px", "transform": "rotate(0deg)"});
-		}, 300);
+			$("#player .option").css({"left": "0px", "transform": "rotate(0deg)", "z-index": "99"});
+		}, 200);
 		// delay for attack animation
 		setTimeout(function() {
 			// attack
 			var attackWon = attack();
 			// delay for hp animation
 			setTimeout(function() {
+				$("#battle .option span").html(opponent.hp);
 				if( attackWon ){
 					wins++;		
+					$("#battle .option").css({"top": "-100px", "opacity": 0});
 					// end battle scene
 					if( wins >= characters.length-1 ){
 						// win game
 					}else{
 						// win notification
-						// remove opponent
-						$("#battle .option").css({"top": "-300px", "opacity": 0});
 						// re-enable opponents box
+						$("#opponentMask").css("display", "none");
 					}
 				}else{
-					$("#battle .option").css({"left": "100px", "transform": "rotate(30deg)"});
+					$("#player .option").css("z-index", "97");
+					$("#battle .option").css({"left": "-500px", "transform": "rotate(-30deg)", "z-index": "100"});
 					setTimeout(function() {
-						$("#battle .option").css({"left": "0px", "transform": "rotate(0deg)"});
-					}, 300);
+						$("#battle .option").css({"left": "0px", "transform": "rotate(0deg)", "z-index": "98"});
+					}, 200);
 					// delay for counterattack animation
 					setTimeout(function() {
 						// defend
 						var counterWon = defend();
 						// delay for hp animation
 						setTimeout(function() {
+							$("#player .option span").html(opponent.hp);
 							if ( counterWon ){
 								// game over
 								// The force was not with you this time.
 								// You were fighting Space-Wizards, what did you expect?
 							}
 							// re-enable attack button
-						}, 600);
+							$("#vs").css("height", "30px");
+						}, 400);
 					}, 500);	
 				}
-			}, 600);
+			}, 400);
 		}, 500);	
 	});
 
