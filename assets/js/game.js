@@ -12,14 +12,14 @@ $(document).ready(function(){
 	var characters = [
 		{
 			"name" : "Obi Wan",
-			"portrait" : "assets/images/obiwan.png",
+			"portrait" : "assets/images/placeholder.png",
 			"hp" : 120,
 			"attack" : 10,
 			"sound" : "assets/sounds/lightsaber.wav"
 		},
 		{
 			"name" : "Luke",
-			"portrait" : "assets/images/luke.png",
+			"portrait" : "assets/images/placeholder.png",
 			"hp" : 120,
 			"attack" : 10,
 			"sound" : "assets/sounds/lightsaber.wav"
@@ -43,14 +43,7 @@ $(document).ready(function(){
 	}
 
 	function buildCharacter( id ){
-		var card = "<div class='option' data-number='" + id + "'>
-				<div class='portrait' style='background-image:url(" + characters[id].portrait + ");'>
-				<h3>" + characters[id].name + "</h3>
-				<div class='hp-holder'>
-					<div class='hp'></div>
-				</div>" + characters[id].hp + "
-			</div>";
-		{}// remove this to make it work. don't know why sublime stops syntax highlighting after a line break in quotes.
+		var card = "<div class='option' data-number='" + id + "'><div class='portrait' style='background-image:url(" + characters[id].portrait + ");'></div><h3>" + characters[id].name + "</h3><div class='hp-holder'><div class='hp'></div></div>" + characters[id].hp + "</div>";
 		return card;
 	}
 
@@ -71,7 +64,6 @@ $(document).ready(function(){
 	}
 
 	function defend(){
-		// counter attack animation
 		// counter attack calculation
 		if( player.hp > opponent.attack ){
 			player.hp -= opponent.attack;
@@ -87,7 +79,7 @@ $(document).ready(function(){
 	// user clicks character
 	$("#player").on("click", ".option", function(){
 		// set player character
-		player = characters[$(this).data("number")]; //todo: to give these elements data-number attr
+		player = characters[$(this).data("number")];
 		// show player character splash
 		// populate options for opponents
 		charactersLeft.splice( $(this).data("number"), 1 );
@@ -143,7 +135,7 @@ $(document).ready(function(){
 					setTimeout(function() {
 						$("#battle .option").css({"left": "0px", "transform": "rotate(0deg)"});
 					}, 300);
-					// delay for attack animation
+					// delay for counterattack animation
 					setTimeout(function() {
 						// defend
 						var counterWon = defend();
@@ -161,4 +153,6 @@ $(document).ready(function(){
 			}, 600);
 		}, 500);	
 	});
-};
+
+	startGame();
+});

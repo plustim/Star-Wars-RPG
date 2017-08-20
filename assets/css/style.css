@@ -1,3 +1,8 @@
+#player, #opponents, #battle{
+	border: 1px solid blue;
+	min-height: 20px;
+}
+
 #player{
 	width: 100%;
 	transition: 0.4s width;
@@ -14,6 +19,7 @@
 	left: 0px;
 	right: 0px;
 	transition: 0.3s linear all;
+	cursor: pointer;
 }
 
 .option h3{
