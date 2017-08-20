@@ -12,34 +12,34 @@ $(document).ready(function(){
 	var characters = [
 		{
 			"id" : 0,
-			"name" : "Obi Wan",
+			"name" : "Anakin",
 			"portrait" : "assets/images/placeholder.png",
 			"hp" : 120,
-			"attack" : 10,
+			"attack" : 30,
 			"sound" : "assets/sounds/lightsaber.wav"
 		},
 		{
 			"id" : 1,
-			"name" : "Mace Windu",
+			"name" : "Youngling",
 			"portrait" : "assets/images/placeholder.png",
 			"hp" : 120,
-			"attack" : 10,
+			"attack" : 2,
 			"sound" : "assets/sounds/lightsaber.wav"
 		},
 		{
 			"id" : 2,
-			"name" : "Yoda",
+			"name" : "Youngling",
 			"portrait" : "assets/images/placeholder.png",
 			"hp" : 120,
-			"attack" : 10,
+			"attack" : 2,
 			"sound" : "assets/sounds/lightsaber.wav"
 		},
 		{
 			"id" : 3,
-			"name" : "Luke",
+			"name" : "Youngling",
 			"portrait" : "assets/images/placeholder.png",
 			"hp" : 120,
-			"attack" : 10,
+			"attack" : 2,
 			"sound" : "assets/sounds/lightsaber.wav"
 		}
 	];
@@ -73,7 +73,7 @@ $(document).ready(function(){
 			opponent.hp = 0;
 		}
 		// increase attack stat
-		player.attack += 10;
+		player.attack += 5;
 		// hp animation
 		var hpBar = opponent.hp / characters[opponent.id].hp * 100 + "%";
 		console.log(opponent.hp, characters[opponent.id].hp, hpBar);
@@ -100,7 +100,7 @@ $(document).ready(function(){
 		// set player character
 		player = $.extend({}, characters[$(this).data("number")]);
 		// show player character splash
-		$("#player").html(buildCharacter($(this).data("number"))).css("width", "300px");
+		$("#player").html(buildCharacter($(this).data("number"))).css("width", "250px");
 		$("#player .option").css("cursor", "auto");
 		// populate options for opponents
 		charactersLeft.splice( $(this).data("number"), 1 );
@@ -128,11 +128,9 @@ $(document).ready(function(){
 		$("#opponents").html(displayOpponents);
 		// show battle scene
 		$("#battle").html(buildCharacter($(this).data("number")));
-		$("#battle, #vs").css("display", "inline-block");
-		setTimeout(function() {
 			$("#battle .option").css({"top": "0px", "opacity": 1});
 			$("#vs").css("height", "30px");
-		}, 100);
+			$("#battle, #vs").css("width", "250px");
 	});
 
 	// user clicks attack button
@@ -157,6 +155,7 @@ $(document).ready(function(){
 					// end battle scene
 					if( wins >= characters.length-1 ){
 						// win game
+						$("#battle, #vs").css("width", "0px");
 					}else{
 						// win notification
 						// re-enable opponents box
