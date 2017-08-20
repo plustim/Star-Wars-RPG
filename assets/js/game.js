@@ -8,39 +8,49 @@
 $(document).ready(function(){
 
 	// variables
-	// I can't help that I love arrays
+
 	var characters = [
 		{
-			name: "Obi Wan",
-			hp: 120,
-			attack: 10
+			"name" : "Obi Wan",
+			"portrait" : "assets/images/obiwan.png",
+			"hp" : 120,
+			"attack" : 10,
+			"sound" : "assets/sounds/lightsaber.wav"
 		},
 		{
-			name: "Luke Skywalker",
-			hp: 120,
-			attack: 10
-		},
-		{
-			name: "Mace Windu",
-			hp: 120,
-			attack: 10
-		},
-		{
-			name: "Darth Maul",
-			hp: 120,
-			attack: 10
-		},
-		{
-			name: "Picard",
-			hp: 120,
-			attack: 10
-		},
+			"name" : "Luke",
+			"portrait" : "assets/images/luke.png",
+			"hp" : 120,
+			"attack" : 10,
+			"sound" : "assets/sounds/lightsaber.wav"
+		}
 	];
 	var player;
+	var charactersLeft = [];
 	var opponent;
 	var wins = 0;
 
 	// functions
+	function startGame(){
+		var playerOptions = "";
+		$.each(characters, function(index, value){
+			charactersLeft.push(index);
+			playerOptions += buildCharacter(index);
+		});
+		$("#player-options").html(playerOptions);
+		$("#opponents").html("");
+		$("#battle").html("");
+	}
+
+	function buildCharacter( id ){
+		var card = "<div class='option' data-number='" + id + "'>
+				<div class='portrait' style='background-image:url(" + characters[id].portrait + ");'>
+				<h3>" + characters[id].name + "</h3>
+				<div class='hp'></div>" + characters[id].hp + "
+			</div>";
+		return card;
+	}
+
 	function attack(){
 		// attack animation
 		// attack calculation 
@@ -57,28 +67,45 @@ $(document).ready(function(){
 	}
 
 	// user clicks character
-	$(".character-option").on("click", function(){
+	$("#player-options").on("click", ".option", function(){
 		// set player character
 		player = characters[$(this).data("number")]; //todo: to give these elements data-number attr
 		// show player character splash
-		// generate options for opponents
-		// show opponent selector
+		// populate options for opponents
+		charactersLeft.splice( $(this).data("number"), 1 );
+		// show opponents box
 	});
 
 	// user clicks opponent
-	$(".character-opponent").on("click", function(){
+	$("#opponents").on("click", "option", function(){
+		// disable opponents box
 		// set current opponent
 		opponent = characters[$(this).data("number")];
+		// remove opponent from opponents options
+		charactersLeft.splice( $.inArray( $(this).data("number"), charactersLeft), 1 );
+		// re-populate options for opponents
+		var displayOpponents = "";
+		$.each(charactersLeft, function(index, value){
+			displayOpponents += "<div class='option' data-number='" + value + "'><div class='portrait' style='background-image:url(" + characters[index].portrait + ");'><h3>" + characters[index].name + "</h3><div class='full-hp'></div>" + characters[index].hp + "</div>";
+		});
+		$("#opponents").html(displayOpponents);
 		// show battle scene
 	});
 
 	// user clicks attack button
-	$("#attack").on("click", function(){
+	$("#battle").on("click", "#attack", function(){
 		// disable attack button
 		// attack
 		var attackWon = attack();
 		if( attackWon ){
+			wins++;
 			// end battle scene
+			if( wins >= characters.length-1 ){
+				// win game
+			}else{
+				// win notification
+				// re-enable opponents box
+			}
 		}else{
 			// defend
 			var counterWon = defend();
