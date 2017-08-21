@@ -69,7 +69,7 @@ $(document).ready(function(){
 		var playerOptions = "";
 		$.each(characters, function(index, value){
 			charactersLeft.push(index);
-			playerOptions += buildCharacter(index);
+			playerOptions += buildCharacter(index, "option");
 		});
 		$("#player").html(playerOptions).css("width", "100%");
 		$("#opponents").html("");
@@ -78,8 +78,13 @@ $(document).ready(function(){
 		$("#notification").html("<p>Select your character.</p>");
 	}
 
-	function buildCharacter( id ){
-		var card = "<div class='option' data-number='" + id + "'><h3>" + characters[id].name + "</h3><div class='portrait' style='background-image:url(" + characters[id].portrait + ");'></div><div class='hp-holder'><div class='hp'></div></div><span>" + characters[id].hp  + "</span> / " + characters[id].hp  + "</div>";
+	function buildCharacter(){
+		var id = arguments[0];
+		var classString = "character";
+		$.each(arguments, function(index, value){
+			classString += " " + value;
+		});
+		var card = "<div class='" + classString + "' data-number='" + id + "'><h3>" + characters[id].name + "</h3><div class='portrait' style='background-image:url(" + characters[id].portrait + ");'></div><div class='hp-holder'><div class='hp'></div></div><span>" + characters[id].hp  + "</span> / " + characters[id].hp  + "</div>";
 		return card;
 	}
 
@@ -102,11 +107,7 @@ $(document).ready(function(){
 
 	function defend(){
 		// counter attack calculation
-		if( player.hp > opponent.counter ){
-			player.hp -= opponent.counter;
-		}else{
-			player.hp = 0;
-		}
+		player.hp = (player.hp > opponent.counter) ? player.hp - opponent.counter : 0;
 		console.log(opponent.name + " attacked you for " + opponent.counter + " damage.");
 		// hp animation
 		var hpBar = player.hp / characters[player.id].hp * 100 + "%";
@@ -120,17 +121,25 @@ $(document).ready(function(){
 		// set player character
 		player = $.extend({}, characters[$(this).data("number")]);
 		// show player character splash
-		$("#player").html(buildCharacter($(this).data("number"))).css("width", "250px");
-		$("#player .option").css("cursor", "auto");
+		$(this).removeClass("option");
+		$("#player .option").removeClass("option").addClass("invis");
 		// populate options for opponents
 		charactersLeft.splice( $(this).data("number"), 1 );
 		// show opponents box
 		var displayOpponents = "";
 		$.each(charactersLeft, function(index, value){
-			displayOpponents += buildCharacter( value );
+			displayOpponents += buildCharacter( value, "invis" );
 		});
 		$("#opponents").html(displayOpponents);
-		$("#notification").html("<p>Select your first opponent.</p>");
+		setTimeout(function() {
+			$("#player .invis").addClass("fold");
+			setTimeout(function() {
+				$("#player").css("width", "250px");
+				$(".fold").css("display", "none");
+				$("#opponents .character").removeClass("invis").addClass("option");
+				$("#notification").html("<p>Select your first opponent.</p>");
+			}, 200);
+		}, 200);
 	});
 
 	// user clicks opponent
@@ -140,21 +149,17 @@ $(document).ready(function(){
 		opponent = $.extend({}, characters[$(this).data("number")]);
 		// remove opponent from opponents options
 		charactersLeft.splice( $.inArray( $(this).data("number"), charactersLeft), 1 );
-		// re-populate options for opponents
-		var displayOpponents = "";
-		$.each(charactersLeft, function(index, value){
-			displayOpponents += buildCharacter( value );
-		});
-		displayOpponents += "<div id='opponentMask'></div>";
-		$("#notification").html("<p>Fight!</p>");
-		$("#opponents").html(displayOpponents);
+		$("#opponents .option").removeClass("option").addClass("fade");
+		$(this).addClass("invis");
 		// show battle scene
+		$("#notification").html("<p>Fight!</p>");
 		$("#battle").html(buildCharacter($(this).data("number")));
 		$("#battle, #vs").css("width", "250px");
 		setTimeout(function() {
-			$("#battle .option").css({"top": "0px", "opacity": 1});
+			$("#opponents .invis").addClass("fold");
+			$("#battle .character").css({"top": "0px", "opacity": 1});
 			$("#vs").css("height", "30px");
-		}, 100);
+		}, 200);
 	});
 
 	// user clicks attack button
@@ -168,9 +173,9 @@ $(document).ready(function(){
 			rando2 = Math.floor(Math.random()*6);
 		}
 		hit[rando1].play();
-		$("#player .option").css({"left": "500px", "transform": "rotate(30deg)", "z-index": "100"});
+		$("#player .character").css({"left": "500px", "transform": "rotate(30deg)", "z-index": "100"});
 		setTimeout(function() {
-			$("#player .option").css({"left": "0px", "transform": "rotate(0deg)", "z-index": "99"});
+			$("#player .character").css({"left": "0px", "transform": "rotate(0deg)", "z-index": "99"});
 		}, 200);
 		// delay for attack animation
 		setTimeout(function() {
@@ -178,10 +183,10 @@ $(document).ready(function(){
 			var attackWon = attack();
 			// delay for hp animation
 			setTimeout(function() {
-				$("#battle .option span").html(opponent.hp);
+				$("#battle .character span").html(opponent.hp);
 				if( attackWon ){
 					wins++;		
-					$("#battle .option").css({"top": "-100px", "opacity": 0});
+					$("#battle .character").css({"top": "-100px", "opacity": 0});
 					// end battle scene
 					if( wins >= characters.length-1 ){
 						// win game
@@ -189,16 +194,17 @@ $(document).ready(function(){
 						$("#notification").html("<p>You Win!<br><button>Play again?</button></p>");
 					}else{
 						// win notification
+						console.log("You defeated " + opponent.name + ".");
 						// re-enable opponents box
 						$("#notification").html("<p>Select your next opponent.</p>");
-						$("#opponentMask").css("display", "none");
+						$("#opponents .character").removeClass("fade").addClass("option");
 					}
 				}else{
-					$("#player .option").css("z-index", "97");
-					$("#battle .option").css({"left": "-500px", "transform": "rotate(-30deg)", "z-index": "100"});
+					$("#player .character").css("z-index", "97");
+					$("#battle .character").css({"left": "-500px", "transform": "rotate(-30deg)", "z-index": "100"});
 					hit[rando2].play();
 					setTimeout(function() {
-						$("#battle .option").css({"left": "0px", "transform": "rotate(0deg)", "z-index": "98"});
+						$("#battle .character").css({"left": "0px", "transform": "rotate(0deg)", "z-index": "98"});
 					}, 200);
 					// delay for counterattack animation
 					setTimeout(function() {
@@ -206,9 +212,10 @@ $(document).ready(function(){
 						var counterWon = defend();
 						// delay for hp animation
 						setTimeout(function() {
-							$("#player .option span").html(player.hp);
+							$("#player .character span").html(player.hp);
 							if ( counterWon ){
 								// game over
+								console.log("Your health has reached zero. You lose.");
 								$("#notification").html("<p>The force was not with you this time.<br><button>Play again?</button></p>");
 								// The force was not with you this time.
 								// You were fighting Space-Wizards, what did you expect?
