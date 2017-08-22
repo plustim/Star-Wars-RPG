@@ -12,39 +12,35 @@ $(document).ready(function(){
 	var characters = [
 		{
 			"id" : 0,
-			"name" : "Anakin",
-			"portrait" : "assets/images/anakin.jpg",
-			"hp" : 180,
-			"attack" : 30,
-			"counter" : 30,
-			"sound" : "assets/sounds/lightsaber.wav"
+			"name" : "Rey",
+			"portrait" : "assets/images/rey.jpg",
+			"hp" : 120,
+			"attack" : 8,
+			"counter" : 10
 		},
 		{
 			"id" : 1,
-			"name" : "Youngling",
-			"portrait" : "assets/images/youngling.jpg",
-			"hp" : 120,
-			"attack" : 2,
-			"counter" : 2,
-			"sound" : "assets/sounds/lightsaber.wav"
+			"name" : "Finn",
+			"portrait" : "assets/images/finn.jpg",
+			"hp" : 150,
+			"attack" : 6,
+			"counter" : 20
 		},
 		{
 			"id" : 2,
-			"name" : "Youngling",
-			"portrait" : "assets/images/youngling.jpg",
-			"hp" : 120,
-			"attack" : 2,
-			"counter" : 2,
-			"sound" : "assets/sounds/lightsaber.wav"
+			"name" : "Kylo Ren",
+			"portrait" : "assets/images/kylo.jpg",
+			"hp" : 180,
+			"attack" : 4,
+			"counter" : 25
 		},
 		{
 			"id" : 3,
-			"name" : "Youngling",
-			"portrait" : "assets/images/youngling.jpg",
-			"hp" : 80,
-			"attack" : 2,
-			"counter" : 2,
-			"sound" : "assets/sounds/lightsaber.wav"
+			"name" : "BB-8",
+			"portrait" : "assets/images/bb8.jpg",
+			"hp" : 100,
+			"attack" : 13,
+			"counter" : 5
 		}
 	];
 	var player;
@@ -90,14 +86,10 @@ $(document).ready(function(){
 
 	function attack(){
 		// attack calculation 
-		if( opponent.hp > player.attack ){
-			opponent.hp -= player.attack;
-		}else{
-			opponent.hp = 0;
-		}
+		opponent.hp = (opponent.hp > player.attack) ? opponent.hp - player.attack : 0;
 		console.log("You attacked " + opponent.name + " for " + player.attack + " damage.");
 		// increase attack stat
-		player.attack += 5;
+		player.attack += characters[player.id].attack;
 		// hp animation
 		var hpBar = opponent.hp / characters[opponent.id].hp * 100 + "%";
 		$("#battle .hp").css("width", hpBar);

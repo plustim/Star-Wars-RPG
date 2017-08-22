@@ -36,7 +36,7 @@ h1{
 .character{
 	display: inline-block;
 	background: white;
-	width: 200px;
+	width: 160px;
 	margin: 10px 20px;
 	text-align: center;
 	position: relative;
@@ -44,13 +44,17 @@ h1{
 	right: 0px;
 	top: 0px;
 	transition: 0.2s linear all;
-	padding: 15px 10px;
+	padding: 10px 10px;
 	border-radius: 10px;
 	box-shadow: 2px 2px 8px black;
 }
 
 .option{
 	cursor: pointer;
+}
+
+.option:hover{
+	top: -20px;
 }
 
 .fold{
@@ -87,6 +91,7 @@ h1{
 	background-position: center top;
 	height: 200px;
 	margin: 10px 0;
+	border: 1px solid black;
 }
 
 .hp-holder{
