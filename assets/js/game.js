@@ -88,6 +88,7 @@ $(document).ready(function(){
 		// attack calculation 
 		opponent.hp = (opponent.hp > player.attack) ? opponent.hp - player.attack : 0;
 		console.log("You attacked " + opponent.name + " for " + player.attack + " damage.");
+		$("#notification").html("<p>You attacked " + opponent.name + " for " + player.attack + " damage.</p>");
 		// increase attack stat
 		player.attack += characters[player.id].attack;
 		// hp animation
@@ -100,6 +101,7 @@ $(document).ready(function(){
 	function defend(){
 		// counter attack calculation
 		player.hp = (player.hp > opponent.counter) ? player.hp - opponent.counter : 0;
+		$("#notification").html("<p>" + opponent.name + " attacked you for " + opponent.counter + " damage.</p>");
 		console.log(opponent.name + " attacked you for " + opponent.counter + " damage.");
 		// hp animation
 		var hpBar = player.hp / characters[player.id].hp * 100 + "%";
